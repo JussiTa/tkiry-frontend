@@ -14,7 +14,7 @@
     "types": ["vite/client", "vite-plugin-svgr/client"],
   },
 
-  "moduleResolution": "bundler",
-
+  "moduleResolution": "bundler",  
+  "references": [{ "path": "./tsconfig.node.json" }]
 
 }
