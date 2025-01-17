@@ -15,6 +15,5 @@
   },
 
   "moduleResolution": "bundler",  
-  "references": [{ "path": "./tsconfig.node.json" }]
 
 }
