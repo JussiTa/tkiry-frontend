@@ -41,7 +41,7 @@ export function CreateLotList() {
           {isAuthenticated ? (
             <Grid xs={4} md={3}>
               {mutation.isPending ? (
-                "Adding todo..."
+                "Adding lotlist..."
               ) : (
                 <>
                   {mutation.isError ? (

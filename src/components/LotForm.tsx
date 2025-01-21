@@ -6,38 +6,19 @@ import {
   Customer,
 } from "../features/api/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useLotlistCustomer } from "../features/lotlists-customers/hooks/use-customer-lotlist";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useAuthContext } from "../features/auth/hooks/use-auth-context";
+import { useQuery } from "@tanstack/react-query";
+
 import ReactSelect from "react-select";
 import { Card, Grid } from "@mui/joy";
 import { FormField } from "./FormField";
-import { Success } from "./Success";
-import {
-  CustomerContext,
-  CustomerDataProvider,
-  useCustomerContext,
-} from "../features/lotlists-customers/customer-data-provider";
+
 import { useNavigate } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_BASE_URL as string;
+let totalLots = 0;
+let totalSum = 0;
+
 export const LotForm = () => {
-  // const { getLotList, addCustomer } = useLotlistCustomer();
-  const [appIsLoading, setAppIsLoading] = useState(true);
-  //const {saveCustomerData} = useCustomerContext;
-
-  const [currentCustomer, setCurrentCustomer] = useState<Customer>();
-
-
-
-  // const { data } = useQuery({
-  //   queryKey: ["lotNumbers"],
-  //   queryFn: getLotList,
-  // });
-
- const navigate = useNavigate()
-
+  const navigate = useNavigate();
   const { data } = useQuery({
     queryKey: ["lotNumbers"],
     queryFn: () =>
@@ -47,28 +28,22 @@ export const LotForm = () => {
   const options = Array.isArray(data)
     ? data.map((item) => {
         const option: SelectedNumbers = {
-          value: item,
-          label: item,
+          value: item["lotNumber"],
+          label: item["lotNumber"],
         };
 
         return option;
       })
     : [];
 
-  // const mutation = useMutation({
-  //   mutationFn: async (neUser: User) => {
-  //     return await addCustomer(neUser);
-  //   },
-  // });
-
-
   const {
     register,
     handleSubmit,
     control,
+    watch,
     formState: { errors },
   } = useForm<Inputs>({ resolver: zodResolver(InputSchema) });
-  //
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const customer: Customer = {
       firstName: data.firstName,
@@ -78,27 +53,22 @@ export const LotForm = () => {
       phoneNumber: data.phoneNumber,
       lotNumber: data.lotNumber,
     };
-  
+
     localStorage.setItem("customer", JSON.stringify(customer));
-   
-     navigate("/payments",{replace: true})
-  
-    //mutation.mutate(user);
+
+    navigate("/payments", { replace: true });
   };
 
- 
-  // if (appIsLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  const watchedLotNumbers = watch().lotNumber;
 
-  // if (mutation.isSuccess) {
-  //   return (
-  //   <Success />);
-  // }
+  if (watchedLotNumbers !== undefined) {
+    totalLots = watchedLotNumbers.length;
+    totalSum = totalLots*data[0]['unitPrice']
+  }
 
   return (
     <Card>
-      <form onSubmit={handleSubmit(onSubmit) }>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <FormField
           type="text"
           placeHolder="Etunimi"
@@ -165,6 +135,10 @@ export const LotForm = () => {
           </button>
         </Grid>
       </form>
+      <div>
+        Olet varannut {totalLots.toString()} arpaa ja se maksaa{" "}
+        {totalSum}€
+      </div>
     </Card>
   );
 };

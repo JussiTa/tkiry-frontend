@@ -23,7 +23,7 @@ export const LoginForm = () => {
   useEffect(() => {
     me()
       .catch(() => {})
-      .finally(() => console.log("jee"));
+      .finally(() => console.log());
   }, []);
 
   return (
