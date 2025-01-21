@@ -3,7 +3,7 @@ import {
   Inputs,
   InputSchema,
   SelectedNumbers,
-  User,
+  Customer,
 } from "../features/api/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -15,15 +15,33 @@ import ReactSelect from "react-select";
 import { Card, Grid } from "@mui/joy";
 import { FormField } from "./FormField";
 import { Success } from "./Success";
-
+import {
+  CustomerContext,
+  CustomerDataProvider,
+  useCustomerContext,
+} from "../features/lotlists-customers/customer-data-provider";
+import { useNavigate } from "react-router-dom";
+const apiUrl = import.meta.env.VITE_API_BASE_URL as string;
 export const LotForm = () => {
-  const { getLotList, addCustomer } = useLotlistCustomer();
+  // const { getLotList, addCustomer } = useLotlistCustomer();
   const [appIsLoading, setAppIsLoading] = useState(true);
-  const { me } = useAuthContext();
+  //const {saveCustomerData} = useCustomerContext;
+
+  const [currentCustomer, setCurrentCustomer] = useState<Customer>();
+
+
+
+  // const { data } = useQuery({
+  //   queryKey: ["lotNumbers"],
+  //   queryFn: getLotList,
+  // });
+
+ const navigate = useNavigate()
 
   const { data } = useQuery({
-    queryKey: ["lotnumbers"],
-    queryFn: getLotList,
+    queryKey: ["lotNumbers"],
+    queryFn: () =>
+      fetch(`${apiUrl}/lotlists-customers/get-all`).then((res) => res.json()),
   });
 
   const options = Array.isArray(data)
@@ -37,14 +55,11 @@ export const LotForm = () => {
       })
     : [];
 
-  const mutation = useMutation({
-    mutationFn: async (neUser: User) => {
-      return await addCustomer(neUser);
-    },
-  });
-
-
-
+  // const mutation = useMutation({
+  //   mutationFn: async (neUser: User) => {
+  //     return await addCustomer(neUser);
+  //   },
+  // });
 
 
   const {
@@ -55,7 +70,7 @@ export const LotForm = () => {
   } = useForm<Inputs>({ resolver: zodResolver(InputSchema) });
   //
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const user: User = {
+    const customer: Customer = {
       firstName: data.firstName,
       lastName: data.lastName,
       address: data.address,
@@ -63,28 +78,27 @@ export const LotForm = () => {
       phoneNumber: data.phoneNumber,
       lotNumber: data.lotNumber,
     };
-
-    mutation.mutate(user);
+  
+    localStorage.setItem("customer", JSON.stringify(customer));
+   
+     navigate("/payments",{replace: true})
+  
+    //mutation.mutate(user);
   };
 
-  useEffect(() => {
-    me()
-      .catch(() => {})
-      .finally(() => setAppIsLoading(false));
-  }, []);
+ 
+  // if (appIsLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  if (appIsLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (mutation.isSuccess) {
-    return (
-    <Success />);
-  }
+  // if (mutation.isSuccess) {
+  //   return (
+  //   <Success />);
+  // }
 
   return (
     <Card>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit) }>
         <FormField
           type="text"
           placeHolder="Etunimi"
@@ -147,7 +161,7 @@ export const LotForm = () => {
         <Grid xs={6} md={10}>
           <button className="submit-button" type="submit">
             {" "}
-            Osallistu arvontaan
+            Siirry maksamaan
           </button>
         </Grid>
       </form>

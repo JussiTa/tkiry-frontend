@@ -19,7 +19,7 @@ export type LotList = {
   endDate: string;
 };
 
-export type User = {
+export type Customer = {
   firstName: string;
   lastName: string;
   address: string;
@@ -43,14 +43,12 @@ export type Inputs = {
 };
 
 export const InputSchema = z.object({
-  firstName: z.string().nonempty( { message: "Etunimi vaaditaan" }),
+  firstName: z.string().nonempty({ message: "Etunimi vaaditaan" }),
   lastName: z.string().min(1, "Sukunimi vaaditaan"),
   address: z.string().min(1, "Osoite vaaditaan"),
-  postalCode: z.number( {message:"Anna postinumero oikeassa muodossa"}),
+  postalCode: z.number({ message: "Anna postinumero oikeassa muodossa" }),
   lotNumber: z.any(),
   phoneNumber: z.string().min(1, "Puhelinnumero vaaditaan"),
 });
 
 type InputSchema = z.infer<typeof InputSchema>;
-
-

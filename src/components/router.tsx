@@ -1,8 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import { LotList } from "./CreateLotList";
-import { LoginForm } from "../LoginForm";
+import { CreateLotList } from "./CreateLotList";
+import { LoginForm } from "./LoginForm";
 import { LotListWithCustomer } from "./LotList";
+import { Logout } from "./Logout";
+import { Payments } from "./Payments";
 export const router = createBrowserRouter([
   {
     // path: "/",
@@ -17,7 +19,7 @@ export const router = createBrowserRouter([
 
   {
     path: "/createList",
-    element: <LotList />,
+    element: <CreateLotList />,
   },
 
   {
@@ -27,7 +29,17 @@ export const router = createBrowserRouter([
 
   {
     path: "/lotlist",
-    element: <LotListWithCustomer/>,
+    element: <LotListWithCustomer />,
+  },
+
+  {
+    path: "/logout",
+    element: <Logout />,
+  },
+
+  {
+    path: "/payments",
+    element: <Payments />,
   },
   //   ],
   // },

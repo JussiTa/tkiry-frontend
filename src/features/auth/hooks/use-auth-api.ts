@@ -27,7 +27,7 @@ export const useAuthApi = () => {
       },
       undefined,
 
-      { credentials: "include" } // Required update
+      { credentials: "include" } 
     );
 
     AuthClientStore.setAccessToken(response.access_token);

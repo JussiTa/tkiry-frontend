@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { useAuthContext } from "./features/auth/hooks/use-auth-context";
+import { useAuthContext } from "../features/auth/hooks/use-auth-context";
+import { Card, Grid } from "@mui/joy";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -28,14 +29,21 @@ export const LoginForm = () => {
   return (
     <>
       {!isAuthenticated ? (
-        <div className="container" style={{ marginTop: "10vh" }}>
+        
+        <Card>
+      
           <form onSubmit={handleLogin}>
             <h2>Kirjaudu sisään</h2>
 
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Käyttäjätunnus:
+            <Grid xs={4} md={10}>
+
+            <label htmlFor="email" className="form-label">
+                Käyttäjätunnus
               </label>
+            </Grid>
+            <Grid xs={4} md={10}>
+
+            
               <input
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -43,12 +51,18 @@ export const LoginForm = () => {
                 type="email"
                 className="form-control"
                 id="email"
+                
               />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Salasana :
+           </Grid>
+
+           <Grid xs={4} md={10}>
+           <label htmlFor="password" className="form-label">
+                Salasana
               </label>
+
+
+           </Grid>
+           <Grid xs={4} md={10}>
               <input
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -57,16 +71,19 @@ export const LoginForm = () => {
                 className="form-control"
                 id="password"
               />
-            </div>
-            <button type="submit" className="btn btn-primary">
+            </Grid>
+            <button type="submit" className="submit-button">
               KIRJAUDU
             </button>
           </form>
-        </div>
+      
+        </Card>
       ) : (
         <div style={{ display: "flex", gap: 16 }}>
           <button onClick={() => logout()}>Logout</button>
         </div>
+
+   
       )}
     </>
   );

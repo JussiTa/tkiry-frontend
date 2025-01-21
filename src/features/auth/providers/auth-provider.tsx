@@ -2,7 +2,6 @@ import { ReactNode, createContext, useState } from "react";
 import { useAuthApi } from "../hooks/use-auth-api.ts";
 import { User } from "../../user/types.ts";
 import { ApiMethod } from "../../api/types.ts";
-//import { User } from "../../user/types.ts";
 
 type ContextType = {
   isAuthenticated: boolean;
@@ -22,6 +21,7 @@ const AuthContext = createContext<ContextType | undefined>(undefined);
 
 function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   const {
     login: authLogin,
     logout: authLogout,
@@ -35,7 +35,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
       setIsAuthenticated(true);
     } catch (e) {
       console.log(e);
-      
+
       setIsAuthenticated(false);
       throw e;
     }

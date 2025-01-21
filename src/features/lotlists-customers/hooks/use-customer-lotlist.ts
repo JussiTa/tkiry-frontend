@@ -1,7 +1,7 @@
 import { useAuthContext } from "../../auth/hooks/use-auth-context";
 import { routes } from "../../api/constants/constants";
 import { ApiMethod } from "../../api/types";
-import type { LotList, User } from "../../api/types";
+import type { LotList, Customer } from "../../api/types";
 
 export const useLotlistCustomer = () => {
   const { sendAuthGuardedRequest } = useAuthContext();
@@ -14,7 +14,7 @@ export const useLotlistCustomer = () => {
     );
   };
 
-  const addCustomer = async (user: User): Promise<unknown> => {
+  const addCustomer = async (user: Customer): Promise<unknown> => {
     return sendAuthGuardedRequest(
       ApiMethod.POST,
       routes.lotListsCustomers.addCustomer,
