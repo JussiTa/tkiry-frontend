@@ -7,6 +7,7 @@ export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { isAuthenticated, login, logout, me } = useAuthContext();
+  const [appIsLoading, setAppIsLoading] = useState(true);
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -23,27 +24,27 @@ export const LoginForm = () => {
   useEffect(() => {
     me()
       .catch(() => {})
-      .finally(() => console.log());
+      .finally(() => setAppIsLoading(false));
   }, []);
 
+  
   return (
     <>
+    {
+    appIsLoading ? <span>Odota...</span> : null
+  }
+
       {!isAuthenticated ? (
-        
         <Card>
-      
           <form onSubmit={handleLogin}>
             <h2>Kirjaudu sisään</h2>
 
             <Grid xs={4} md={10}>
-
-            <label htmlFor="email" className="form-label">
+              <label htmlFor="email" className="form-label">
                 Käyttäjätunnus
               </label>
             </Grid>
             <Grid xs={4} md={10}>
-
-            
               <input
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -51,18 +52,15 @@ export const LoginForm = () => {
                 type="email"
                 className="form-control"
                 id="email"
-                
               />
-           </Grid>
+            </Grid>
 
-           <Grid xs={4} md={10}>
-           <label htmlFor="password" className="form-label">
+            <Grid xs={4} md={10}>
+              <label htmlFor="password" className="form-label">
                 Salasana
               </label>
-
-
-           </Grid>
-           <Grid xs={4} md={10}>
+            </Grid>
+            <Grid xs={4} md={10}>
               <input
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -76,14 +74,11 @@ export const LoginForm = () => {
               KIRJAUDU
             </button>
           </form>
-      
         </Card>
       ) : (
         <div style={{ display: "flex", gap: 16 }}>
           <button onClick={() => logout()}>Logout</button>
         </div>
-
-   
       )}
     </>
   );

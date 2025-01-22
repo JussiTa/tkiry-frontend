@@ -14,11 +14,11 @@ export const useLotlistCustomer = () => {
     );
   };
 
-  const addCustomer = async (user: Customer): Promise<unknown> => {
+  const addCustomer = async (customer: Customer): Promise<unknown> => {
     return sendAuthGuardedRequest(
       ApiMethod.POST,
       routes.lotListsCustomers.addCustomer,
-      user
+      customer
     );
   };
 

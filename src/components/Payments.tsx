@@ -1,8 +1,15 @@
 import { Card } from "@mui/joy";
 import { usePayment } from "../fetchData";
+import { Customer } from "../features/api/types";
 
 export const Payments = () => {
-  const data = usePayment();
+  const localStoreCustomer = localStorage.getItem("customer");
+
+  const customer: Customer =
+    localStoreCustomer !== null ? JSON.parse(localStoreCustomer) : null;
+
+  const data = usePayment(customer);
+  
 
   return (
     <>
@@ -24,6 +31,7 @@ export const Payments = () => {
             {provider.parameters.map((param) => (
               <input type="hidden" name={param.name} value={param.value} />
             ))}
+
             <button>
               <img src={provider.icon} />
             </button>

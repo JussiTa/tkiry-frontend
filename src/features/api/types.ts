@@ -26,6 +26,8 @@ export type Customer = {
   postalCode: number;
   phoneNumber: string;
   lotNumber: SelectedNumbers[];
+  totalAmount: number;
+  email: string;
 };
 
 export type SelectedNumbers = {
@@ -40,7 +42,10 @@ export type Inputs = {
   postalCode: number;
   phoneNumber: string;
   lotNumber: SelectedNumbers[];
+  email: string;
 };
+
+const endOfEmail = /@\w+\.fi|@\w+\.net|@\w+\.com/;
 
 export const InputSchema = z.object({
   firstName: z.string().nonempty({ message: "Etunimi vaaditaan" }),
@@ -49,6 +54,11 @@ export const InputSchema = z.object({
   postalCode: z.number({ message: "Anna postinumero oikeassa muodossa" }),
   lotNumber: z.any(),
   phoneNumber: z.string().min(1, "Puhelinnumero vaaditaan"),
+  email: z.string().refine((val) => val.match(endOfEmail) ,{
+    message: "Tarkista emailin oikeellisuus",
+   })
 });
 
 type InputSchema = z.infer<typeof InputSchema>;
+
+

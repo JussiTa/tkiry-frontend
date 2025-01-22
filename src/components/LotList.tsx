@@ -1,6 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLotlistCustomer } from "../features/lotlists-customers/hooks/use-customer-lotlist";
 import { Sheet, Table } from "@mui/joy";
+import { useAuthContext } from "../features/auth/hooks/use-auth-context";
+import { useEffect } from "react";
+import { Navigate } from "react-router-dom";
 
 type LotRow = {
   firstName: string;
@@ -22,7 +25,13 @@ export const LotListWithCustomer = () => {
         }),
   });
 
- 
+  const { me, isAuthenticated } = useAuthContext();
+
+  useEffect(() => {
+    me()
+      .catch(() => {})
+      .finally(() => {});
+  }, []);
 
   const lotrows = Array.isArray(data)
     ? data.map((item) => {
@@ -31,7 +40,6 @@ export const LotListWithCustomer = () => {
           lastName: item["lastName"],
           phoneNumber: item["phoneNumber"],
           lotNumber: item["lotNumber"],
-          
         };
         return lotRow;
       })
@@ -40,29 +48,35 @@ export const LotListWithCustomer = () => {
   // return data ? data : null;
 
   return (
-    <Sheet>
-      <Table aria-label="basic table">
-        <thead>
-          <tr>
-            <th style={{ width: "40%" }}>Etunimi</th>
-            <th>Sukunimi</th>
-            <th>Puhellinnumero</th>
-            <th>Arpanumero</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.isArray(lotrows)
-            ? lotrows.map((item) => (
-                <tr key={item.lotNumber}>
-                  <td>{item.firstName}</td>
-                  <td>{item.lastName}</td>
-                  <td>{item.phoneNumber}</td>
-                  <td>{item.lotNumber}</td>
-                </tr>
-              ))
-            : null}
-        </tbody>
-      </Table>
-    </Sheet>
+    <>
+      {isAuthenticated ? (
+        <Sheet>
+          <Table aria-label="basic table">
+            <thead>
+              <tr>
+                <th style={{ width: "40%" }}>Etunimi</th>
+                <th>Sukunimi</th>
+                <th>Puhellinnumero</th>
+                <th>Arpanumero</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(lotrows)
+                ? lotrows.map((item) => (
+                    <tr key={item.lotNumber}>
+                      <td>{item.firstName}</td>
+                      <td>{item.lastName}</td>
+                      <td>{item.phoneNumber}</td>
+                      <td>{item.lotNumber}</td>
+                    </tr>
+                  ))
+                : null}
+            </tbody>
+          </Table>
+        </Sheet>
+      ) : (
+        <Navigate to="/login" replace />
+      )}
+    </>
   );
 };

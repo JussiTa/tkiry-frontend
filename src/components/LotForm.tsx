@@ -44,18 +44,18 @@ export const LotForm = () => {
     formState: { errors },
   } = useForm<Inputs>({ resolver: zodResolver(InputSchema) });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = (formData) => {
     const customer: Customer = {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      address: data.address,
-      postalCode: data.postalCode,
-      phoneNumber: data.phoneNumber,
-      lotNumber: data.lotNumber,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      address: formData.address,
+      postalCode: formData.postalCode,
+      phoneNumber: formData.phoneNumber,
+      lotNumber: formData.lotNumber,
+      totalAmount: formData.lotNumber.length * data[0]["unitPrice"],
+      email: formData.email.replace(' ',''),
     };
-
     localStorage.setItem("customer", JSON.stringify(customer));
-
     navigate("/payments", { replace: true });
   };
 
@@ -63,7 +63,7 @@ export const LotForm = () => {
 
   if (watchedLotNumbers !== undefined) {
     totalLots = watchedLotNumbers.length;
-    totalSum = totalLots*data[0]['unitPrice']
+    totalSum = totalLots * data[0]["unitPrice"];
   }
 
   return (
@@ -108,6 +108,13 @@ export const LotForm = () => {
           register={register}
           error={errors.phoneNumber}
         />
+        <FormField
+          type="text"
+          placeHolder="Säköpostiosoite"
+          name="email"
+          register={register}
+          error={errors.email}
+        />
 
         <Grid xs={4} md={10}>
           <label>Valitse listalta numero(t) </label>
@@ -136,8 +143,7 @@ export const LotForm = () => {
         </Grid>
       </form>
       <div>
-        Olet varannut {totalLots.toString()} arpaa ja se maksaa{" "}
-        {totalSum}€
+        Olet varannut {totalLots.toString()} arpaa yht. {totalSum}€
       </div>
     </Card>
   );

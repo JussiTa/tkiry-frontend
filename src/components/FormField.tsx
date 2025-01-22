@@ -8,7 +8,8 @@ type ValidFieldNames =
   | "address"
   | "postalCode"
   | "phoneNumber"
-  | "lotNumber";
+  | "lotNumber"
+  | "email";
 
 interface FormFieldProps {
   type: string;

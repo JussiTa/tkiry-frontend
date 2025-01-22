@@ -1,13 +1,8 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  Navigate,
-  Route,
-  BrowserRouter as Router,
-  Routes,
-} from "react-router-dom";
-import { router } from "./components/router.tsx";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+
 import { AuthProvider } from "./features/auth/providers/auth-provider.tsx";
 import App from "./App.tsx";
 import React from "react";
@@ -17,6 +12,9 @@ import { Logout } from "./components/Logout.tsx";
 import { LoginForm } from "./components/LoginForm.tsx";
 import { CreateLotList } from "./components/CreateLotList.tsx";
 import { Payments } from "./components/Payments.tsx";
+import { Success } from "./components/Success.tsx";
+import { Cancel } from "./components/Cancel.tsx";
+import { LotListWithCustomer } from "./components/LotList.tsx";
 
 const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
@@ -29,6 +27,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path={"/logout"} element={<Logout />} />
             <Route path={"/login"} element={<LoginForm />} />
             <Route path={"/createList"} element={<CreateLotList />} />
+            <Route path={"/lotlist"} element={<LotListWithCustomer />} />
           </Routes>
         </Router>
       </AuthProvider>
@@ -36,8 +35,9 @@ createRoot(document.getElementById("root")!).render(
       <Router>
         <Routes>
           <Route path={"/"} element={<App />} />
-
           <Route path={"/payments"} element={<Payments />} />
+          <Route path={"/success"} element={<Success />} />
+          <Route path={"/cancel"} element={<Cancel />} />
         </Routes>
       </Router>
       <Footer />
