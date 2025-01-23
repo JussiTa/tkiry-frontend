@@ -15,22 +15,36 @@ import { Payments } from "./components/Payments.tsx";
 import { Success } from "./components/Success.tsx";
 import { Cancel } from "./components/Cancel.tsx";
 import { LotListWithCustomer } from "./components/LotList.tsx";
-import { Admin } from "./components/Admin.tsx";
+import { ListDocument } from "./components/ListDocument.tsx";
+import { PDFViewer } from "@react-pdf/renderer";
+import { StyleSheet } from "@react-pdf/renderer";
+const styles = StyleSheet.create({
+  viewer: {
+    width:1500,
+    height:800,
+  },
+});
 
 const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      
       <AuthProvider>
-      <Header/>
+        <Header />
         <Router>
           <Routes>
             <Route path={"/logout"} element={<Logout />} />
             <Route path={"/login"} element={<LoginForm />} />
             <Route path={"/createList"} element={<CreateLotList />} />
             <Route path={"/lotlist"} element={<LotListWithCustomer />} />
-            <Route path={"/admin"} element={<Admin />} />
+            <Route
+              path={"/listDocument"}
+              element={
+                <PDFViewer style={styles.viewer}>
+                  <ListDocument />
+                </PDFViewer>
+              }
+            />
           </Routes>
         </Router>
       </AuthProvider>
