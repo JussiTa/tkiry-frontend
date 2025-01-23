@@ -35,7 +35,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
       setIsAuthenticated(true);
     } catch (e) {
       console.log(e);
-
       setIsAuthenticated(false);
       throw e;
     }

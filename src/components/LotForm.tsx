@@ -55,6 +55,7 @@ export const LotForm = () => {
       totalAmount: formData.lotNumber.length * data[0]["unitPrice"],
       email: formData.email.replace(' ',''),
     };
+
     localStorage.setItem("customer", JSON.stringify(customer));
     navigate("/payments", { replace: true });
   };

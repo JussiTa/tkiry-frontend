@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLotlistCustomer } from "../features/lotlists-customers/hooks/use-customer-lotlist";
-import { Sheet, Table } from "@mui/joy";
+import {Sheet, Table, Typography } from "@mui/joy";
 import { useAuthContext } from "../features/auth/hooks/use-auth-context";
 import { useEffect } from "react";
-import { Navigate } from "react-router-dom";
 
 type LotRow = {
   firstName: string;
@@ -25,6 +24,7 @@ export const LotListWithCustomer = () => {
         }),
   });
 
+
   const { me, isAuthenticated } = useAuthContext();
 
   useEffect(() => {
@@ -45,7 +45,8 @@ export const LotListWithCustomer = () => {
       })
     : null;
 
-  // return data ? data : null;
+   console.log(isAuthenticated)
+
 
   return (
     <>
@@ -75,8 +76,12 @@ export const LotListWithCustomer = () => {
           </Table>
         </Sheet>
       ) : (
-        <Navigate to="/login" replace />
-      )}
+     
+         <Typography fontSize="100px"textColor="red">401</Typography>
+      )
+      }
+    
     </>
+    
   );
 };

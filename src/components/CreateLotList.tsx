@@ -34,6 +34,7 @@ export function CreateLotList() {
   if (appIsLoading) {
     return <div>Loading...</div>;
   }
+
   return (
     <>
       <Card>

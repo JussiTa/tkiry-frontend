@@ -15,19 +15,22 @@ import { Payments } from "./components/Payments.tsx";
 import { Success } from "./components/Success.tsx";
 import { Cancel } from "./components/Cancel.tsx";
 import { LotListWithCustomer } from "./components/LotList.tsx";
+import { Admin } from "./components/Admin.tsx";
 
 const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Header />
+      
       <AuthProvider>
+      <Header/>
         <Router>
           <Routes>
             <Route path={"/logout"} element={<Logout />} />
             <Route path={"/login"} element={<LoginForm />} />
             <Route path={"/createList"} element={<CreateLotList />} />
             <Route path={"/lotlist"} element={<LotListWithCustomer />} />
+            <Route path={"/admin"} element={<Admin />} />
           </Routes>
         </Router>
       </AuthProvider>

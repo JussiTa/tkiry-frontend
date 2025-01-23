@@ -6,7 +6,9 @@ import { LotForm } from "./components/LotForm";
 
 function App() {
   return (
+    
     <ErrorBoundary fallback={<ErrorAlert />}>
+      
       <LotForm />
     </ErrorBoundary>
   );
