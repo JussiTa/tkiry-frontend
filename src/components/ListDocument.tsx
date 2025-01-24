@@ -1,5 +1,16 @@
-import { BorderBottom } from "@mui/icons-material";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  PDFViewer,
+} from "@react-pdf/renderer";
+import { useLotlistCustomer } from "../features/lotlists-customers/hooks/use-customer-lotlist";
+import { useQuery } from "@tanstack/react-query";
+import { Typography } from "@mui/joy";
+import { useAuthContext } from "../features/auth/hooks/use-auth-context";
+import { useEffect } from "react";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -10,6 +21,8 @@ const styles = StyleSheet.create({
 
   section: {
     flexDirection: "row",
+    marginRight: 10,
+    marginLeft: 10,
   },
 
   header: {
@@ -30,56 +43,97 @@ const styles = StyleSheet.create({
     borderBottom: 1,
   },
 });
-const data = [
-  {
-    name: "Person1",
-    address: "Testikatu 2",
-    phoneNumber: 12345,
-    lotNumber: 1,
-  },
-  {
-    name: "Person3",
-    address: "Testikatu 3",
-    phoneNumber: 12345,
-    lotNumber: 2,
-  },
-  {
-    name: "Person1",
-    address: "Testikatu 2",
-    phoneNumber: 12345,
-    lotNumber: 3,
-  },
-  {
-    name: "Person2",
-    address: "Testikatu 1",
-    phoneNumber: 12345,
-    lotNumber: 4,
-  },
-];
 
-export const ListDocument = () => (
-  <Document>
-    <Page wrap size="A4" orientation="landscape" style={styles.page}>
-      <Text fixed>
-        Poliisihallituksen myöntämä keräyslupa nro. xxxxx. Kevätarpajaiset 2025
-      </Text>
-      <View style={styles.section}>
-        <Text style={styles.header}>Nimi</Text>
-        <Text style={styles.header}>Osoite</Text>
-        <Text style={styles.header}>Puhelinnumero</Text>
-        <Text style={styles.header}>Arpanumero</Text>
-      </View>
-      {data.map((item) => (
-        <>
-          <View style={styles.section}>
-            <Text style={styles.row}>{item.name}</Text>
-            <Text style={styles.row}>{item.address}</Text>
-            <Text style={styles.row}>{item.phoneNumber}</Text>
-            <Text style={styles.row}>{item.lotNumber}</Text>
-          </View>
-        </>
-      ))}
-      ;
-    </Page>
-  </Document>
-);
+type LotRow = {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  lotNumber: string;
+  address: string;
+};
+
+const stylesViewer = StyleSheet.create({
+  viewer: {
+    width: 1500,
+    height: 800,
+  },
+});
+
+export const ListDocument = () => {
+  const { isAuthenticated, me } = useAuthContext();
+
+  const { getLotListWithCustomers } = useLotlistCustomer();
+  const { data } = useQuery({
+    queryKey: ["lotNumbers"],
+    queryFn: () =>
+      getLotListWithCustomers()
+        .then((res: unknown) => res)
+        .catch(function (error) {
+          console.log(error);
+          return null;
+        }),
+  });
+
+  const lotrows = Array.isArray(data)
+    ? data.map((item) => {
+        const lotRow: LotRow = {
+          firstName: item["firstName"],
+          lastName: item["lastName"],
+          phoneNumber: item["phoneNumber"],
+          lotNumber: item["lotNumber"],
+          address: item["address"],
+        };
+        return lotRow;
+      })
+    : null;
+
+    console.log(isAuthenticated);
+
+     useEffect(() => {
+        me()
+          .catch(() => {})
+          .finally(() => {});
+      }, []);
+    
+
+  return (
+    <>
+      {isAuthenticated ? (
+        <PDFViewer style={stylesViewer.viewer}>
+          <Document>
+            <Page wrap size="A4" orientation="landscape" style={styles.page}>
+              <Text>
+                {" "}
+                Poliisihallituksen myöntämä keräyslupa nro. xxxxx.
+                Kevätarpajaiset 2025
+              </Text>
+              <View style={styles.section}>
+                <Text style={styles.header}> Nimi</Text>
+                <Text style={styles.header}> Osoite</Text>
+                <Text style={styles.header}> Puhelinnumero</Text>
+                <Text style={styles.header}> Arpanumero</Text>
+              </View>
+              {lotrows?.map((item) => (
+                <>
+                  <View style={styles.section}>
+                    <Text style={styles.row}>
+                      {" "}
+                      {item.firstName} {item.lastName}
+                    </Text>
+                    <Text style={styles.row}> {item.address}</Text>
+                    <Text style={styles.row}> {item.phoneNumber}</Text>
+                    <Text style={styles.row}> {item.lotNumber}</Text>
+                  </View>
+                </>
+              ))}
+            </Page>
+          </Document>
+        </PDFViewer>
+      ) : (
+        <Typography fontSize="100px" textColor="red">
+          401
+        </Typography>
+      )}
+    </>
+  );
+};

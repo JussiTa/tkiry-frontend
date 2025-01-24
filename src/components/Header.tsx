@@ -34,7 +34,7 @@ export const Header = () => {
 
   const pages = [{
     "name":
-    "LISTA", "url": "/lotlist"},{"name":"LUO LISTA", "url": "/createList"}];
+    "LISTA", "url": "/lotlist"},{"name":"LUO LISTA", "url": "/createList"}, {name: "TULOSTA LISTA", url: "/listDocument"}];
 
   return (
     <Box sx={{ flexGrow: 1 }}>

@@ -45,9 +45,6 @@ export const LotListWithCustomer = () => {
       })
     : null;
 
-   console.log(isAuthenticated)
-
-
   return (
     <>
       {isAuthenticated ? (
@@ -55,7 +52,7 @@ export const LotListWithCustomer = () => {
           <Table aria-label="basic table">
             <thead>
               <tr>
-                <th style={{ width: "40%" }}>Etunimi</th>
+                <th>Etunimi</th>
                 <th>Sukunimi</th>
                 <th>Puhellinnumero</th>
                 <th>Arpanumero</th>

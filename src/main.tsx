@@ -16,14 +16,6 @@ import { Success } from "./components/Success.tsx";
 import { Cancel } from "./components/Cancel.tsx";
 import { LotListWithCustomer } from "./components/LotList.tsx";
 import { ListDocument } from "./components/ListDocument.tsx";
-import { PDFViewer } from "@react-pdf/renderer";
-import { StyleSheet } from "@react-pdf/renderer";
-const styles = StyleSheet.create({
-  viewer: {
-    width:1500,
-    height:800,
-  },
-});
 
 const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
@@ -37,14 +29,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path={"/login"} element={<LoginForm />} />
             <Route path={"/createList"} element={<CreateLotList />} />
             <Route path={"/lotlist"} element={<LotListWithCustomer />} />
-            <Route
-              path={"/listDocument"}
-              element={
-                <PDFViewer style={styles.viewer}>
-                  <ListDocument />
-                </PDFViewer>
-              }
-            />
+            <Route path={"/listDocument"} element={<ListDocument />} />
           </Routes>
         </Router>
       </AuthProvider>
