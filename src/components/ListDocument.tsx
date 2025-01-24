@@ -7,10 +7,10 @@ import {
   PDFViewer,
 } from "@react-pdf/renderer";
 import { useLotlistCustomer } from "../features/lotlists-customers/hooks/use-customer-lotlist";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Typography } from "@mui/joy";
 import { useAuthContext } from "../features/auth/hooks/use-auth-context";
-import { useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -61,9 +61,16 @@ const stylesViewer = StyleSheet.create({
 
 export const ListDocument = () => {
   const { isAuthenticated, me } = useAuthContext();
+  const [appIsLoading, setAppIsLoading] = useState(true);
+
+  useEffect(() => {
+    me()
+      .catch(() => {})
+      .finally(() => {setAppIsLoading(false)});
+  }, []);
 
   const { getLotListWithCustomers } = useLotlistCustomer();
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ["lotNumbers"],
     queryFn: () =>
       getLotListWithCustomers()
@@ -87,16 +94,13 @@ export const ListDocument = () => {
       })
     : null;
 
-     useEffect(() => {
-        me()
-          .catch(() => {})
-          .finally(() => {});
-      }, []);
+   
     
 
   return (
     <>
-      {isAuthenticated ? (
+   
+      {isAuthenticated || appIsLoading? (
         <PDFViewer style={stylesViewer.viewer}>
           <Document>
             <Page wrap size="A4" orientation="landscape" style={styles.page}>
@@ -128,10 +132,14 @@ export const ListDocument = () => {
           </Document>
         </PDFViewer>
       ) : (
+        <Suspense fallback="Hetkinen...">
         <Typography fontSize="100px" textColor="red">
           401
         </Typography>
+        </Suspense>
+     
       )}
+       
     </>
   );
 };

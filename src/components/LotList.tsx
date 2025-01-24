@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLotlistCustomer } from "../features/lotlists-customers/hooks/use-customer-lotlist";
 import { Sheet, Table, Typography } from "@mui/joy";
 import { useAuthContext } from "../features/auth/hooks/use-auth-context";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type LotRow = {
   firstName: string;
@@ -13,6 +13,7 @@ type LotRow = {
 
 export const LotListWithCustomer = () => {
   const { getLotListWithCustomers } = useLotlistCustomer();
+  const [appIsLoading, setAppIsLoading] = useState(true);
   const { data } = useQuery({
     queryKey: ["lotNumbers"],
     queryFn: () =>
@@ -29,7 +30,7 @@ export const LotListWithCustomer = () => {
   useEffect(() => {
     me()
       .catch(() => {})
-      .finally(() => {});
+      .finally(() => {setAppIsLoading(true)});
   }, []);
 
   const lotrows = Array.isArray(data)
@@ -46,7 +47,7 @@ export const LotListWithCustomer = () => {
 
   return (
     <>
-      {isAuthenticated ? (
+      {isAuthenticated || appIsLoading? (
         <Sheet>
           <Table aria-label="basic table">
             <thead>
