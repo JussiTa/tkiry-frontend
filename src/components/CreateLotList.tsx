@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../features/auth/hooks/use-auth-context";
 import { useLotlistCustomer } from "../features/lotlists-customers/hooks/use-customer-lotlist";
 import type { LotList } from "../features/api/types";
-import { Card, Grid } from "@mui/joy";
+import { Card, Grid, Typography } from "@mui/joy";
 
 export function CreateLotList() {
   const [title, setTitle] = useState("");
@@ -97,7 +97,9 @@ export function CreateLotList() {
               )}
             </Grid>
           ) : (
-            <Navigate to="/login" replace />
+            <Typography fontSize="100px" textColor="red">
+            401
+          </Typography>
           )}
         </Grid>
       </Card>

@@ -87,8 +87,6 @@ export const ListDocument = () => {
       })
     : null;
 
-    console.log(isAuthenticated);
-
      useEffect(() => {
         me()
           .catch(() => {})
