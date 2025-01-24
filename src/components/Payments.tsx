@@ -1,6 +1,7 @@
 import { Card } from "@mui/joy";
 import { usePayment } from "../fetchData";
 import { Customer } from "../features/api/types";
+import { Suspense } from "react";
 
 export const Payments = () => {
   const localStoreCustomer = localStorage.getItem("customer");
@@ -12,8 +13,8 @@ export const Payments = () => {
 
   return (
     <>
-      <div>
-        <span>
+      <div className="disclaimer">
+        <span >
           {" "}
           Valitsemalla maksutavan hyväksyt{" "}
           <a
@@ -24,6 +25,7 @@ export const Payments = () => {
           </a>{" "}
         </span>
       </div>
+      <Suspense fallback={<span>Hetkinen...</span>}>
       <Card>
         {data?.providers.map((provider) => (
           <form method="POST" action={provider.url}>
@@ -37,6 +39,7 @@ export const Payments = () => {
           </form>
         ))}
       </Card>
+    </Suspense>
     </>
   );
 };
