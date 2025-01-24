@@ -14,13 +14,7 @@ export const useLotlistCustomer = () => {
     );
   };
 
-  const addCustomer = async (customer: Customer): Promise<unknown> => {
-    return sendAuthGuardedRequest(
-      ApiMethod.POST,
-      routes.lotListsCustomers.addCustomer,
-      customer
-    );
-  };
+
 
   const getLotList = async (): Promise<unknown> => {
     return await sendAuthGuardedRequest(
@@ -36,5 +30,5 @@ export const useLotlistCustomer = () => {
     );
   };
 
-  return { createLotList, getLotList, addCustomer, getLotListWithCustomers };
+  return { createLotList, getLotList, getLotListWithCustomers };
 };

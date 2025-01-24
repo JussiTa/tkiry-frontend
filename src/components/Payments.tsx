@@ -9,8 +9,8 @@ export const Payments = () => {
   const customer: Customer =
     localStoreCustomer !== null ? JSON.parse(localStoreCustomer) : null;
 
-  const data = usePayment(customer);
-
+  const {data} = usePayment(customer);
+  //TODO add paytrail stamp to localstore to confirm on success pay right customer
   return (
     <>
       <div className="disclaimer">

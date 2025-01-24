@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { PaymentData } from "../../tkiry-backend/src/modules/interface";
 import axios from "axios";
 import { Customer } from "./features/api/types";
@@ -8,8 +8,8 @@ export type LotNumber = {
   lotNumber: object;
 };
 
-export function usePayment(customer: Customer): PaymentData | null {
-  const { data } = useQuery<PaymentData>({
+export function usePayment(customer: Customer){
+  return useSuspenseQuery<PaymentData>({
     queryKey: ["payments"],
     queryFn: async () =>
       await axios
@@ -17,5 +17,5 @@ export function usePayment(customer: Customer): PaymentData | null {
         .then((res) => res.data),
   });
 
-  return data ? data : null;
+
 }
