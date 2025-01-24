@@ -9,7 +9,6 @@ export const Payments = () => {
     localStoreCustomer !== null ? JSON.parse(localStoreCustomer) : null;
 
   const data = usePayment(customer);
-  
 
   return (
     <>

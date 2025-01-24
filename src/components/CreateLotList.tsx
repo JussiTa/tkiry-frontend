@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../features/auth/hooks/use-auth-context";
 import { useLotlistCustomer } from "../features/lotlists-customers/hooks/use-customer-lotlist";
 import type { LotList } from "../features/api/types";
