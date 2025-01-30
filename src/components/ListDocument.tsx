@@ -54,6 +54,7 @@ type LotRow = {
 
 const stylesViewer = StyleSheet.create({
   viewer: {
+    paddingTop:50,
     width: 1500,
     height: 800,
   },
